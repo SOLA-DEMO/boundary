@@ -112,6 +112,13 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.sola.services.ejbs</groupId>
+            <artifactId>sola-external</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+
 
     </dependencies>
     <build>
@@ -211,6 +218,15 @@
                         <id>wsgen-generate-filestreaming-wsdl</id>
                         <configuration>
                             <sei>org.sola.services.boundary.ws.FileStreaming</sei>  
+                        </configuration>      
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>wsgen</goal>
+                        </goals>
+                        <id>wsgen-generate-external-wsdl</id>
+                        <configuration>
+                            <sei>org.sola.services.boundary.ws.External</sei>  
                         </configuration>      
                     </execution>
                 </executions>

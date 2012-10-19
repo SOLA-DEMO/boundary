@@ -34,16 +34,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.xml.ws.WebServiceContext;
 import org.sola.common.RolesConstants;
-import org.sola.services.boundary.transferobjects.referencedata.ApplicationActionTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.ApplicationStatusTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.AvailabilityStatusTO;
-import org.sola.services.boundary.transferobjects.referencedata.BaUnitRelTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.BaUnitTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.BrSeverityTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.BrTechnicalTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.BrValidationTargetTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.CadastreObjectTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.ChangeStatusTypeTO;
+import org.sola.services.boundary.transferobjects.referencedata.*;
 import org.sola.services.common.faults.FaultUtility;
 import org.sola.services.common.faults.SOLAFault;
 import org.sola.services.common.faults.UnhandledFault;
@@ -51,23 +42,6 @@ import org.sola.services.ejb.application.businesslogic.ApplicationEJBLocal;
 import org.sola.services.common.contracts.GenericTranslator;
 import org.sola.services.common.webservices.AbstractWebService;
 import org.sola.services.ejb.party.businesslogic.PartyEJBLocal;
-import org.sola.services.boundary.transferobjects.referencedata.CommunicationTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.GenderTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.IdTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.MortgageTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.PartyTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.PartyRoleTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.PresentationFormTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.RegistrationStatusTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.RequestCategoryTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.RequestTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.ServiceActionTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.ServiceStatusTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.SourceBaUnitRelationTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.SourceTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.RrrTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.RrrGroupTypeTO;
-import org.sola.services.boundary.transferobjects.referencedata.TypeActionTO;
 import org.sola.services.common.ServiceConstants;
 import org.sola.services.common.contracts.AbstractCodeTO;
 import org.sola.services.common.faults.*;
@@ -103,6 +77,8 @@ import org.sola.services.ejb.system.repository.entities.BrTechnicalType;
 import org.sola.services.ejb.system.repository.entities.BrValidationTargetType;
 import org.sola.services.ejb.transaction.businesslogic.TransactionEJBLocal;
 import org.sola.services.ejb.transaction.repository.entities.RegistrationStatusType;
+import org.sola.services.ejbs.external.businesslogic.ExternalEJBLocal;
+import org.sola.services.ejbs.external.repository.entities.ClientType;
 
 /**
  * Web Service Boundary class to expose the SOLA reference code values.
@@ -124,6 +100,8 @@ public class ReferenceData extends AbstractWebService {
     TransactionEJBLocal transactionEJB;
     @EJB
     SystemEJBLocal systemEJB;
+    @EJB
+    ExternalEJBLocal externalEJB;
     @Resource
     private WebServiceContext wsContext;
 
@@ -879,6 +857,25 @@ public class ReferenceData extends AbstractWebService {
     }
 
     /**
+     * Return list of Client types.
+     */
+    @WebMethod(operationName = "getClientTypes")
+    public List<ClientTypeTO> getClientTypes(final String lang) throws SOLAFault, UnhandledFault {
+        final Object[] result = {null};
+
+        runOpenQuery(wsContext, new Runnable() {
+
+            @Override
+            public void run() {
+                result[0] = GenericTranslator.toTOList(
+                        externalEJB.getClientTypes(lang), ClientTypeTO.class);
+            }
+        });
+
+        return (List<ClientTypeTO>) result[0];
+    }
+
+    /**
      * Supports saving of all SOLA Reference Data types. <p>Requires the {@linkplain RolesConstants#ADMIN_MANAGE_REFDATA}
      * role.</p>
      *
@@ -1002,6 +999,10 @@ public class ReferenceData extends AbstractWebService {
                     codeEntity = administrativeEJB.getCodeEntity(BaUnitRelType.class, refDataTO.getCode());
                     codeEntity = GenericTranslator.fromTO(refDataTO, BaUnitRelType.class, codeEntity);
                     administrativeEJB.saveCodeEntity(codeEntity);
+                } else if (refDataTO instanceof ClientTypeTO) {
+                    codeEntity = externalEJB.getCodeEntity(ClientType.class, refDataTO.getCode());
+                    codeEntity = GenericTranslator.fromTO(refDataTO, ClientType.class, codeEntity);
+                    externalEJB.saveCodeEntity(codeEntity);
                 }
 
                 result = GenericTranslator.toTO(codeEntity, refDataTO.getClass());

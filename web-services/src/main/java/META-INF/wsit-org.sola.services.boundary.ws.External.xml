@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+ <definitions 
+ xmlns="http://schemas.xmlsoap.org/wsdl/" 
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" name="external-service" targetNamespace="http%3A%2F%2Fwebservices.sola.org%2Fexternal" xmlns:tns="http%3A%2F%2Fwebservices.sola.org%2Fexternal" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsp1="http://www.w3.org/ns/ws-policy" xmlns:fi="http://java.sun.com/xml/ns/wsit/2006/09/policy/fastinfoset/service" xmlns:tcp="http://java.sun.com/xml/ns/wsit/2006/09/policy/soaptcp/service" xmlns:wsaw="http://www.w3.org/2005/08/addressing" xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy" xmlns:sc="http://schemas.sun.com/2006/03/wss/server" xmlns:wspp="http://java.sun.com/xml/ns/wsit/policy" 
+ >
+    <message name="checkConnection"/>
+    <message name="checkConnectionResponse"/>
+    <message name="getClient"/>
+    <message name="getClientResponse"/>
+    <message name="SOLAAccessFault"/>
+    <message name="SOLAFault"/>
+    <message name="UnhandledFault"/>
+    <message name="getClientRequests"/>
+    <message name="getClientRequestsResponse"/>
+    <message name="saveClient"/>
+    <message name="saveClientResponse"/>
+    <message name="OptimisticLockingFault"/>
+    <message name="SOLAValidationFault"/>
+    <message name="makeRequest"/>
+    <message name="makeRequestResponse"/>
+    <portType name="External">
+        <operation name="checkConnection">
+            <input message="tns:checkConnection"/>
+            <output message="tns:checkConnectionResponse"/>
+        </operation>
+        <operation name="getClient">
+            <input message="tns:getClient"/>
+            <output message="tns:getClientResponse"/>
+            <fault name="SOLAAccessFault" message="tns:SOLAAccessFault"/>
+            <fault name="SOLAFault" message="tns:SOLAFault"/>
+            <fault name="UnhandledFault" message="tns:UnhandledFault"/>
+        </operation>
+        <operation name="getClientRequests">
+            <input message="tns:getClientRequests"/>
+            <output message="tns:getClientRequestsResponse"/>
+            <fault name="SOLAFault" message="tns:SOLAFault"/>
+            <fault name="UnhandledFault" message="tns:UnhandledFault"/>
+        </operation>
+        <operation name="saveClient">
+            <input message="tns:saveClient"/>
+            <output message="tns:saveClientResponse"/>
+            <fault name="SOLAFault" message="tns:SOLAFault"/>
+            <fault name="UnhandledFault" message="tns:UnhandledFault"/>
+            <fault name="SOLAAccessFault" message="tns:SOLAAccessFault"/>
+            <fault name="OptimisticLockingFault" message="tns:OptimisticLockingFault"/>
+            <fault name="SOLAValidationFault" message="tns:SOLAValidationFault"/>
+        </operation>
+        <operation name="makeRequest">
+            <input message="tns:makeRequest"/>
+            <output message="tns:makeRequestResponse"/>
+            <fault name="SOLAFault" message="tns:SOLAFault"/>
+            <fault name="UnhandledFault" message="tns:UnhandledFault"/>
+        </operation>
+    </portType>
+    <binding name="ExternalPortBinding" type="tns:External">
+        <wsp:PolicyReference URI="#ExternalPortBindingPolicy"/>
+        <operation name="checkConnection">
+            <input>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Input_Policy"/>
+            </input>
+            <output>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Output_Policy"/>
+            </output>
+        </operation>
+        <operation name="getClient">
+            <input>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Input_Policy"/>
+            </input>
+            <output>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Output_Policy"/>
+            </output>
+            <fault name="SOLAAccessFault"/>
+            <fault name="SOLAFault"/>
+            <fault name="UnhandledFault"/>
+        </operation>
+        <operation name="getClientRequests">
+            <input>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Input_Policy"/>
+            </input>
+            <output>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Output_Policy"/>
+            </output>
+            <fault name="SOLAFault"/>
+            <fault name="UnhandledFault"/>
+        </operation>
+        <operation name="saveClient">
+            <input>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Input_Policy"/>
+            </input>
+            <output>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Output_Policy"/>
+            </output>
+            <fault name="SOLAFault"/>
+            <fault name="UnhandledFault"/>
+            <fault name="SOLAAccessFault"/>
+            <fault name="OptimisticLockingFault"/>
+            <fault name="SOLAValidationFault"/>
+        </operation>
+        <operation name="makeRequest">
+            <input>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Input_Policy"/>
+            </input>
+            <output>
+                <wsp:PolicyReference URI="#ExternalPortBinding_checkConnection_Output_Policy"/>
+            </output>
+            <fault name="SOLAFault"/>
+            <fault name="UnhandledFault"/>
+        </operation>
+    </binding>
+    <service name="external-service">
+        <port name="ExternalPort" binding="tns:ExternalPortBinding"/>
+    </service>
+    <wsp:Policy wsu:Id="ExternalPortBindingPolicy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <wsaw:UsingAddressing xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" wsp:Optional="false"/>
+                <sp:SymmetricBinding>
+                    <wsp:Policy>
+                        <sp:ProtectionToken>
+                            <wsp:Policy>
+                                <sp:X509Token sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/Never">
+                                    <wsp:Policy>
+                                        <sp:WssX509V3Token10/>
+                                        <sp:RequireIssuerSerialReference/>
+                                    </wsp:Policy>
+                                </sp:X509Token>
+                            </wsp:Policy>
+                        </sp:ProtectionToken>
+                        <sp:Layout>
+                            <wsp:Policy>
+                                <sp:Strict/>
+                            </wsp:Policy>
+                        </sp:Layout>
+                        <sp:IncludeTimestamp/>
+                        <sp:OnlySignEntireHeadersAndBody/>
+                        <sp:AlgorithmSuite>
+                            <wsp:Policy>
+                                <sp:Basic128/>
+                            </wsp:Policy>
+                        </sp:AlgorithmSuite>
+                    </wsp:Policy>
+                </sp:SymmetricBinding>
+                <sp:Wss11>
+                    <wsp:Policy>
+                        <sp:MustSupportRefIssuerSerial/>
+                        <sp:MustSupportRefThumbprint/>
+                        <sp:MustSupportRefEncryptedKey/>
+                    </wsp:Policy>
+                </sp:Wss11>
+                <sp:SignedSupportingTokens>
+                    <wsp:Policy>
+                        <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+                            <wsp:Policy>
+                                <sp:WssUsernameToken10/>
+                            </wsp:Policy>
+                        </sp:UsernameToken>
+                    </wsp:Policy>
+                </sp:SignedSupportingTokens>
+                <sc:KeyStore wspp:visibility="private" location="keystore.jks" type="JKS" storepass="changeit" alias="xws-security-server"/>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ExternalPortBinding_checkConnection_Input_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                    <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="AckRequested" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="SequenceAcknowledgement" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="Sequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="CreateSequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+    <wsp:Policy wsu:Id="ExternalPortBinding_checkConnection_Output_Policy">
+        <wsp:ExactlyOne>
+            <wsp:All>
+                <sp:EncryptedParts>
+                    <sp:Body/>
+                </sp:EncryptedParts>
+                <sp:SignedParts>
+                    <sp:Body/>
+                    <sp:Header Name="To" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="From" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="FaultTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="ReplyTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="MessageID" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="RelatesTo" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="Action" Namespace="http://www.w3.org/2005/08/addressing"/>
+                    <sp:Header Name="AckRequested" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="SequenceAcknowledgement" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="Sequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                    <sp:Header Name="CreateSequence" Namespace="http://schemas.xmlsoap.org/ws/2005/02/rm"/>
+                </sp:SignedParts>
+            </wsp:All>
+        </wsp:ExactlyOne>
+    </wsp:Policy>
+</definitions>
