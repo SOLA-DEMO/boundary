@@ -26,6 +26,7 @@
 package org.sola.services.boundary.wsclients;
 
 import java.util.List;
+import org.sola.common.RolesConstants;
 import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
 import org.sola.webservices.transferobjects.referencedata.*;
@@ -154,6 +155,10 @@ public interface ReferenceDataClient extends AbstractWSClient {
      * ReferenceData.getBaUnitRelTypes - Identifier for the getBaUnitRelTypes method
      */
     public static final String GET_BA_UNIT_REL_TYPES = SERVICE_NAME + "getBaUnitRelTypes";
+    /**
+     * ReferenceData.getClientTypes - Identifier for the getClientTypes method
+     */
+    public static final String GET_CLIENT_TYPES = SERVICE_NAME + "getClientTypes";
 
     /**
      * Retrieves all source.source_type code values using the default locale of the client to

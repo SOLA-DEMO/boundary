@@ -90,6 +90,21 @@ public class MockTOFactory {
     }
 
     /**
+     * Creates a default list of client types <p> SQL query to generate list from DB: </p>
+     * <pre>
+     * select 'result.add(createCode(ClientTypeTO.class, "' || code || '", "' || display_value || '"));'
+     * from external.client_type
+     * </pre>
+     */
+    public static List<ClientTypeTO> createClientTypes() {
+        List<ClientTypeTO> result = new ArrayList<ClientTypeTO>();
+        result.add(createCode(ClientTypeTO.class, "bank", "Bank"));
+        result.add(createCode(ClientTypeTO.class, "notary", "Notary"));
+        result.add(createCode(ClientTypeTO.class, "realEstate", "Real estate"));
+        return result;
+    }
+
+    /**
      * Creates a default list of gender types <p> SQL query to generate list from DB: </p>
      * <pre>
      * select 'result.add(createCode(GenderTypeTO.class, "' || code || '", "' || display_value || '"));'
