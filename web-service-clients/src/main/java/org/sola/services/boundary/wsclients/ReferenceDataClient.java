@@ -570,4 +570,14 @@ public interface ReferenceDataClient extends AbstractWSClient {
      * @throws WebServiceClientException
      */
     List<BaUnitRelTypeTO> getBaUnitRelTypes() throws WebServiceClientException;
+
+    /**
+     * Return list of Client types.
+     */
+    List<ClientTypeTO> getClientTypes() throws WebServiceClientException;
+
+    /**
+     * Return list of Client types using provided language.
+     */
+    List<ClientTypeTO> getClientTypes(String lang) throws WebServiceClientException;
 }

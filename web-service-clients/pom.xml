@@ -76,6 +76,19 @@
                         </goals>
                         <configuration>
                             <wsdlFiles>
+                                <wsdlFile>ExternalService.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <staleFile>${project.build.directory}/jaxws/stale/external-service.stale</staleFile>
+                        </configuration>
+                        <id>external-service</id>
+                        <phase>generate-sources</phase>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
                                 <wsdlFile>SearchService.wsdl</wsdlFile>
                             </wsdlFiles>
                             <staleFile>${project.build.directory}/jaxws/stale/search-service.stale</staleFile>                    
@@ -363,6 +376,41 @@
                     <catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
                 </configuration>
             </plugin-->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxws-maven-plugin</artifactId>
+                <version>1.10</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <wsdlFiles>
+                                <wsdlFile>localhost_8080/sola/webservices/external-service.wsdl</wsdlFile>
+                            </wsdlFiles>
+                            <wsdlLocation>http://localhost:8080/sola/webservices/external-service?wsdl</wsdlLocation>
+                            <staleFile>${project.build.directory}/jaxws/stale/external-service.stale</staleFile>
+                        </configuration>
+                        <id>wsimport-generate-external-service</id>
+                        <phase>generate-sources</phase>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>javax.xml</groupId>
+                        <artifactId>webservices-api</artifactId>
+                        <version>1.4</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <sourceDestDir>${project.build.directory}/generated-sources/jaxws-wsimport</sourceDestDir>
+                    <xnocompile>true</xnocompile>
+                    <verbose>true</verbose>
+                    <extension>true</extension>
+                    <catalog>${basedir}/src/jax-ws-catalog.xml</catalog>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <pluginRepositories>

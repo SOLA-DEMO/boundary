@@ -31,31 +31,7 @@ import org.sola.services.boundary.wsclients.exception.WebServiceClientException;
 import org.sola.webservices.referencedata.ReferenceData;
 import org.sola.webservices.referencedata.ReferencedataService;
 import org.sola.webservices.transferobjects.AbstractCodeTO;
-import org.sola.webservices.transferobjects.referencedata.ApplicationActionTypeTO;
-import org.sola.webservices.transferobjects.referencedata.ApplicationStatusTypeTO;
-import org.sola.webservices.transferobjects.referencedata.BaUnitRelTypeTO;
-import org.sola.webservices.transferobjects.referencedata.BaUnitTypeTO;
-import org.sola.webservices.transferobjects.referencedata.BrSeverityTypeTO;
-import org.sola.webservices.transferobjects.referencedata.BrTechnicalTypeTO;
-import org.sola.webservices.transferobjects.referencedata.BrValidationTargetTypeTO;
-import org.sola.webservices.transferobjects.referencedata.CadastreObjectTypeTO;
-import org.sola.webservices.transferobjects.referencedata.ChangeStatusTypeTO;
-import org.sola.webservices.transferobjects.referencedata.CommunicationTypeTO;
-import org.sola.webservices.transferobjects.referencedata.GenderTypeTO;
-import org.sola.webservices.transferobjects.referencedata.IdTypeTO;
-import org.sola.webservices.transferobjects.referencedata.MortgageTypeTO;
-import org.sola.webservices.transferobjects.referencedata.PartyTypeTO;
-import org.sola.webservices.transferobjects.referencedata.PartyRoleTypeTO;
-import org.sola.webservices.transferobjects.referencedata.RegistrationStatusTypeTO;
-import org.sola.webservices.transferobjects.referencedata.RequestCategoryTypeTO;
-import org.sola.webservices.transferobjects.referencedata.RequestTypeTO;
-import org.sola.webservices.transferobjects.referencedata.RrrGroupTypeTO;
-import org.sola.webservices.transferobjects.referencedata.TypeActionTO;
-import org.sola.webservices.transferobjects.referencedata.RrrTypeTO;
-import org.sola.webservices.transferobjects.referencedata.ServiceActionTypeTO;
-import org.sola.webservices.transferobjects.referencedata.ServiceStatusTypeTO;
-import org.sola.webservices.transferobjects.referencedata.SourceBaUnitRelationTypeTO;
-import org.sola.webservices.transferobjects.referencedata.SourceTypeTO;
+import org.sola.webservices.transferobjects.referencedata.*;
 
 /**
  * Implementation class for the {@linkplain ReferenceDataClient} interface.
@@ -612,5 +588,26 @@ public class ReferenceDataClientImpl extends AbstractWSClientImpl implements Ref
     @Override
     public List<BaUnitRelTypeTO> getBaUnitRelTypes() throws WebServiceClientException {
         return getBaUnitRelTypes(getLanguageCode());
+    }
+
+    @Override
+    public List<ClientTypeTO> getClientTypes() throws WebServiceClientException {
+        return getClientTypes(getLanguageCode());
+    }
+
+    @Override
+    public List<ClientTypeTO> getClientTypes(String lang) throws WebServiceClientException {
+        List<ClientTypeTO> result = null;
+        final String methodName = ReferenceDataClient.GET_CLIENT_TYPES;
+        try {
+            beforeWebMethod(methodName, lang);
+            result = getPort().getClientTypes(lang);
+        } catch (Exception e) {
+            processException(methodName, e);
+
+        } finally {
+            afterWebMethod(methodName, result, lang);
+        }
+        return result;
     }
 }
